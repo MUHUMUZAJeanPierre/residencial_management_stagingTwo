@@ -61,9 +61,6 @@ class BuildingViewSet(viewsets.ModelViewSet):
     )
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
-# class BuildingViewSet(viewsets.ModelViewSet):
-#     queryset = Building.objects.all()
-#     serializer_class = BuildingSerializer
 
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
