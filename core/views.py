@@ -1,9 +1,12 @@
 from rest_framework import viewsets
-from .models import Building, Room, Resident, MaintenanceRequest, Event, Announcement, User
+from .models import Building, Room, Resident, MaintenanceRequest, Event, Announcement, Communication, Resident, Payment
 from .serializers import (
     BuildingSerializer, RoomSerializer, ResidentSerializer,
     MaintenanceRequestSerializer, EventSerializer, AnnouncementSerializer,
-    SignupSerializer, LoginSerializer
+    SignupSerializer, LoginSerializer,
+    PaymentSerializer,
+    RegistrationForResidentSerializer,
+    CommunicationSerializer
 )
 from rest_framework import status
 from rest_framework.response import Response
@@ -409,3 +412,165 @@ class UserViewSet(viewsets.ViewSet):
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+
+    @swagger_auto_schema(
+        operation_summary="List all payments",
+        operation_description="Retrieve a list of all payments."
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Create a new payment",
+        operation_description="Create a new payment in the system.",
+        request_body=PaymentSerializer,
+        responses={status.HTTP_201_CREATED: PaymentSerializer}
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Retrieve a payment",
+        operation_description="Retrieve a specific payment by its ID.",
+        responses={status.HTTP_200_OK: PaymentSerializer}
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Update a payment",
+        operation_description="Update an existing payment.",
+        request_body=PaymentSerializer,
+        responses={status.HTTP_200_OK: PaymentSerializer}
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Partial update a payment",
+        operation_description="Partially update a payment.",
+        request_body=PaymentSerializer,
+        responses={status.HTTP_200_OK: PaymentSerializer}
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Delete a payment",
+        operation_description="Delete a specific payment by its ID."
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+
+# ViewSet for Communication
+class CommunicationViewSet(viewsets.ModelViewSet):
+    queryset = Communication.objects.all()
+    serializer_class = CommunicationSerializer
+
+    @swagger_auto_schema(
+        operation_summary="List all communications",
+        operation_description="Retrieve a list of all communications."
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Create a new communication",
+        operation_description="Create a new communication in the system.",
+        request_body=CommunicationSerializer,
+        responses={status.HTTP_201_CREATED: CommunicationSerializer}
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Retrieve a communication",
+        operation_description="Retrieve a specific communication by its ID.",
+        responses={status.HTTP_200_OK: CommunicationSerializer}
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Update a communication",
+        operation_description="Update an existing communication.",
+        request_body=CommunicationSerializer,
+        responses={status.HTTP_200_OK: CommunicationSerializer}
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Partial update a communication",
+        operation_description="Partially update a communication.",
+        request_body=CommunicationSerializer,
+        responses={status.HTTP_200_OK: CommunicationSerializer}
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Delete a communication",
+        operation_description="Delete a specific communication by its ID."
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+
+# ViewSet for RegistrationForResident
+class RegistrationForResidentViewSet(viewsets.ModelViewSet):
+    queryset = Resident.objects.all()  # Assuming this is where the residents are managed
+    serializer_class = RegistrationForResidentSerializer  # Assuming you have created this serializer
+
+    @swagger_auto_schema(
+        operation_summary="List all resident registrations",
+        operation_description="Retrieve a list of all resident registrations."
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Create a new resident registration",
+        operation_description="Register a new resident in the system.",
+        request_body=RegistrationForResidentSerializer,
+        responses={status.HTTP_201_CREATED: RegistrationForResidentSerializer}
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Retrieve a resident registration",
+        operation_description="Retrieve a specific resident registration by its ID.",
+        responses={status.HTTP_200_OK: RegistrationForResidentSerializer}
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Update a resident registration",
+        operation_description="Update an existing resident registration.",
+        request_body=RegistrationForResidentSerializer,
+        responses={status.HTTP_200_OK: RegistrationForResidentSerializer}
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Partial update a resident registration",
+        operation_description="Partially update a resident registration.",
+        request_body=RegistrationForResidentSerializer,
+        responses={status.HTTP_200_OK: RegistrationForResidentSerializer}
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_summary="Delete a resident registration",
+        operation_description="Delete a specific resident registration by its ID."
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)

@@ -64,3 +64,46 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
+
+class Communication(models.Model):
+    resident = models.ForeignKey(Resident, related_name='communications', on_delete=models.CASCADE)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Communication from {self.resident.user.username} on {self.created_at}'
+
+
+class RegistrationForResident(models.Model):
+    resident = models.ForeignKey(Resident, related_name='registrations', on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, related_name='registrations', on_delete=models.CASCADE)
+    application_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default='Pending')
+
+    def __str__(self):
+        return f'Registration for {self.resident.user.username} - {self.room.number}'
+
+
+class Payment(models.Model):
+    MONTHS = [
+        ('January', 'January'),
+        ('February', 'February'),
+        ('March', 'March'),
+        ('April', 'April'),
+        ('May', 'May'),
+        ('June', 'June'),
+        ('July', 'July'),
+        ('August', 'August'),
+        ('September', 'September'),
+        ('October', 'October'),
+        ('November', 'November'),
+        ('December', 'December'),
+    ]
+    resident = models.ForeignKey(Resident, related_name='payments', on_delete=models.CASCADE)
+    month = models.CharField(max_length=20, choices=MONTHS)
+    year = models.PositiveIntegerField()
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Payment from {self.resident.user.username} for {self.month} {self.year}'

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Building, Room, Resident, MaintenanceRequest, Event, Announcement, User
+from .models import Building, Room, Resident, MaintenanceRequest, Event, Announcement, User, Communication, Payment,RegistrationForResident
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import ValidationError
 from django.contrib.auth import authenticate
@@ -79,3 +79,20 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])  # Hash the password
         user.save()
         return user
+
+class CommunicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Communication
+        fields = ['id', 'resident', 'message', 'created_at']  # Include 'id' for easy reference
+
+
+class RegistrationForResidentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RegistrationForResident
+        fields = ['id', 'resident', 'room', 'application_date', 'status']  # Include 'id' for easy reference
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['id', 'resident', 'month', 'year', 'amount', 'payment_date']
