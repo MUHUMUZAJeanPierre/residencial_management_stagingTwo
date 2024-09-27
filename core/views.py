@@ -347,6 +347,9 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 # User ViewSet for registration and login
 
 from drf_yasg import openapi
+from django.contrib.auth.models import User
+from django.shortcuts import get_list_or_404
+from rest_framework.authtoken.models import Token
 
 class UserViewSet(viewsets.ViewSet):
     @swagger_auto_schema(
@@ -367,12 +370,17 @@ class UserViewSet(viewsets.ViewSet):
     def register(self, request):
         serializer = SignupSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            serializer.save()
+            user = User.objects.get(username=serializer.data['username'])
+            user.set_password(request.data['password'])
+            user.save()
+            token = Token.objects.create(user = user)
             return Response({
-                'status': 'user created',
-                'user': SignupSerializer(user).data
-            }, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                'status': 'user successful register',
+                "user":serializer.data,
+                'token': token.key}, 
+                status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         operation_summary='Login users',
@@ -391,8 +399,13 @@ class UserViewSet(viewsets.ViewSet):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
+            user.set_password(request.data['password'])
+            user.save()
+            token, create = Token.objects.get_or_create(user=user)
             return Response({
                 'status': 'login successful',
+                'token': token.key,
                 'user': LoginSerializer(user).data
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

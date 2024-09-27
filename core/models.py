@@ -1,14 +1,5 @@
 from django.db import models
-
-# Custom User model
-class User(models.Model):
-    email = models.CharField(max_length=80, unique=True)
-    username = models.CharField(max_length=30, unique=True)
-    password = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.username
-
+from django.contrib.auth.models import User
 
 class Building(models.Model):
     name = models.CharField(max_length=100)
